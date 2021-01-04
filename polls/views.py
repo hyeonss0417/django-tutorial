@@ -5,6 +5,7 @@ from django.views import generic
 from django.db.models import F
 
 from .models import Question, Choice
+from django.utils import timezone
 
 # Create your views here.
 
@@ -16,7 +17,9 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         """Return the last five pulished questions.
         """
-        return Question.objects.order_by('-pub_date')[:5]
+        return Question.objects.filter(
+            pub_date__lte=timezone.now()
+        ).order_by('-pub_date')[:5]
 
 
 class DetailView(generic.DetailView):
@@ -27,6 +30,9 @@ class DetailView(generic.DetailView):
     model = Question
     # template_name := '<app_name>/<model_name>_detail.html' #default;
     # template_name = 'polls/detail.html'
+
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 
 class ResultsView(generic.DetailView):
