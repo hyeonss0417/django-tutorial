@@ -1,15 +1,17 @@
 version: "3.5"
 services:
   nginx:
+    container_name: nginx_service
     image: nginx:latest
+    volumes:
+      - .mysite.conf:/etc/nginx/conf.d
+      - .:/django
     ports:
       - "80:80"
-    volumes:
-      - .:/django
-      - .mysite.conf:/etc/nginx/conf.d
     depends_on:
       - web
   web:
+    container_name: web
     build:
       context: .
       dockerfile: Dockerfile
