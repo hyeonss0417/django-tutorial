@@ -1,19 +1,14 @@
-FROM centos:centos7
+FROM python:3.6.5
 
-RUN yum install -y http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-2.noarch.rpm
-RUN yum install -y python-pip python-devel nginx gcc mysql-devel
+ENV PYTHONUNBUFFERED 1
 
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-ADD mysite.conf /etc/nginx/conf.d/mysite.conf
+RUN mkdir /django
+WORKDIR /django
 
-RUN pip install django gunicorn MySQL-python
+ADD requirements.txt /django/
 
-ADD ./ /var/www/mysite
-WORKDIR /var/www/mysite
-RUN chmod +x entrypoint.sh
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-EXPOSE 80
-
-ENTRYPOINT ./entrypoint.sh
-
+ADD . /django/
 
