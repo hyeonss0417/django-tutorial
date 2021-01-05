@@ -13,7 +13,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: gunicon mysite.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn mysite.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/django/
     expose:
